@@ -1,9 +1,8 @@
 package repository
 
 import (
-	"auth-service/config"
-	"auth-service/domain"
-	"auth-service/messaging"
+	"blog-service/config"
+	"blog-service/domain"
 )
 
 type BlogRepository struct{}
@@ -16,15 +15,7 @@ func NewBlogRepository() domain.BlogRepository {
 
 func (br *BlogRepository) CreateBlog(blog domain.Blog) (domain.Blog, error) {
 	err := config.DB.Create(&blog).Error
-
-
-	// Publish new blog posted event
-	event := messaging.NewBlogPostedEvent{
-		UserID: "all",
-		Message: "New blog posted",
-	}
 	
-	err = messaging.PublishNewBlogPostedEvent(event)
 	if err != nil {
 		return domain.Blog{}, err
 	}
@@ -65,14 +56,7 @@ func (br *BlogRepository) GetBlogByUserID(id uint) ([]domain.Blog, error) {
 func (br *BlogRepository) CreateComment(comment domain.Comment) (domain.Comment, error) {
 	err := config.DB.Create(&comment).Error
 
-	// Publish new blog posted event
-
-	event := messaging.CommentPostedEvent{
-		PostID: comment.PostID,
-		Message: "New comment posted",
-	}
-
-	err = messaging.PublishCommentPostedEvent(event)
+	
 	if err != nil {
 		return domain.Comment{}, err
 	}

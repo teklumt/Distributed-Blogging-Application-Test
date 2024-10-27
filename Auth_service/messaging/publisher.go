@@ -50,72 +50,12 @@ func (p *Publisher) PublishMessage(queueName string, message []byte) error {
 
 
 type UserRegistrationEvent struct {
-    UserID   uint   `json:"userID"`
-    Username string `json:"username"`
+    UserID   uint   `json:"user_id"`
+    Message string `json:"message"`
 }
 
 type UserLoginEvent struct {
-    UserID   uint   `json:"userID"`
-    Username string `json:"username"`
+    UserID   uint   `json:"user_id"`
+	Message string `json:"message"` 
 }
 
-
-// type UserRegistrationEvent struct {
-// 	UserID   uint   `json:"userID"`
-// 	Message string `json:"message"`
-// }
-
-// type UserLoginEvent struct {
-// 	UserID   uint   `json:"userID"`
-// 	Username string `json:"username"`
-// }
-
-// func (p *Publisher) PublishUserRegistrationEvent(event UserRegistrationEvent) error {
-// 	body, err := json.Marshal(event)
-// 	if (err != nil) {
-// 		return err
-// 	}
-
-// 	err = p.channel.Publish(
-// 		"user-events",        // exchange
-// 		"user.registration",  // routing key
-// 		false,                // mandatory
-// 		false,                // immediate
-// 		amqp.Publishing{
-// 			ContentType: "application/json",
-// 			Body:        body,
-// 		},
-// 	)
-// 	if err != nil {
-// 		log.Printf("Failed to publish registration event: %v", err)
-// 		return err
-// 	}
-
-// 	log.Println("User registration event published")
-// 	return nil
-// }
-
-// func (p *Publisher) PublishUserLoginEvent(event UserLoginEvent) error {
-// 	body, err := json.Marshal(event)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	err = p.channel.Publish(
-// 		"user-events", // exchange
-// 		"user.login",  // routing key
-// 		false,         // mandatory
-// 		false,         // immediate
-// 		amqp.Publishing{
-// 			ContentType: "application/json",
-// 			Body:        body,
-// 		},
-// 	)
-// 	if err != nil {
-// 		log.Printf("Failed to publish login event: %v", err)
-// 		return err
-// 	}
-
-// 	log.Println("User login event published")
-// 	return nil
-// }

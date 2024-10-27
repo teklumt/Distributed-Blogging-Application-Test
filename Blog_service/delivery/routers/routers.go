@@ -1,20 +1,21 @@
 package routers
 
 import (
-	"auth-service/delivery/controllers"
-	"auth-service/infrastructure"
-	"auth-service/repository"
-	"auth-service/usecase"
+	"blog-service/delivery/controllers"
+	"blog-service/infrastructure"
+	"blog-service/messaging"
+	"blog-service/repository"
+	"blog-service/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(r *gin.Engine) {
+func SetupRouter(r *gin.Engine, publisher *messaging.Publisher) {
 
     BlogRepo := repository.NewBlogRepository()
 	UserUsecase := usecase.NewBlogUsecase(BlogRepo)
 	
-    BlogController := controllers.NewBlogController(UserUsecase)
+    BlogController := controllers.NewBlogController(UserUsecase, publisher)
 
     BlogGroup := r.Group("/blog")
 	BlogGroup.Use(infrastructure.AuthMiddleware())

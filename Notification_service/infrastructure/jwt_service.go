@@ -1,8 +1,8 @@
 package infrastructure
 
 import (
-	"blog-service/config"
-	"blog-service/domain"
+	"teklumt/Distributed-Blogging-Application-Test-notification-service/config"
+	"teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
 	"fmt"
 	"time"
 

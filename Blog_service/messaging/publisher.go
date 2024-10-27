@@ -1,79 +1,50 @@
 package messaging
 
 import (
-	"auth-service/config"
-	"encoding/json"
+	"blog-service/config" // Update this import path if necessary
 	"log"
 
-	"github.com/rabbitmq/amqp091-go"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-
-
-
-
-type NewBlogPostedEvent struct {
-	UserID string `json:"user_id"`
-	Message string `json:"message"`
+type Publisher struct {
+	channel *amqp.Channel
 }
 
+func NewPublisher(rabbitMQConfig *config.RabbitMQConfig) *Publisher {
+	return &Publisher{channel: rabbitMQConfig.Ch}
+}
 
-func PublishNewBlogPostedEvent(event NewBlogPostedEvent) error {
-	body, err := json.Marshal(event)
-	if err != nil {
-		return err
-	}
-
-	err = config.RabbitMQChannel.Publish(
-		"blog-events",        // exchange
-		"blog.posted", // routing key
-		false,                 // mandatory
-		false,                 // immediate
-		amqp091.Publishing{
-			ContentType: "application/json",
-			Body:        body,
-		},
+func (p *Publisher) PublishMessage(queueName string, message []byte) error {
+	// Declare the queue in case it doesn’t exist
+	_, err := p.channel.QueueDeclare(
+		queueName, // name
+		true,      // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
 	)
 	if err != nil {
-		log.Printf("Failed to publish new blog posted event: %v", err)
+		log.Printf("Failed to declare a queue: %v", err)
 		return err
 	}
 
-	log.Println("New blog posted event published")
-	return nil
-	
-
-}
-
-
-type BlogDeletedEvent struct {
-	UserId string `json:"user_id"`
-	Message string `json:"message"`
-
-}
-
-func PublishBlogDeletedEvent(event BlogDeletedEvent) error {
-	body, err := json.Marshal(event)
+	err = p.channel.Publish(
+		"",        // exchange
+		queueName, // routing key (queue name)
+		false,     // mandatory
+		false,     // immediate
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        message,
+		})
 	if err != nil {
+		log.Printf("Failed to publish message to queue %s: %v", queueName, err)
 		return err
 	}
 
-	err = config.RabbitMQChannel.Publish(
-		"blog-events",        // exchange
-		"blog.deleted", // routing key
-		false,                 // mandatory
-		false,                 // immediate
-		amqp091.Publishing{
-			ContentType: "application/json",
-			Body:        body,
-		},
-	)
-	if err != nil {
-		log.Printf("Failed to publish blog deleted event: %v", err)
-		return err
-	}
-
-	log.Println("Blog deleted event published")
+	log.Printf("Message published to queue %s: %s", queueName, message)
 	return nil
 }
 
@@ -81,32 +52,15 @@ func PublishBlogDeletedEvent(event BlogDeletedEvent) error {
 
 
 type CommentPostedEvent struct {
+	UserID  uint `json:"user_id"`
 	Message string `json:"message"`
-	PostID  uint `json:"post_Id"`
 }
 
 
-func PublishCommentPostedEvent(event CommentPostedEvent) error {
-	body, err := json.Marshal(event)
-	if err != nil {
-		return err
-	}
-
-	err = config.RabbitMQChannel.Publish(
-		"comment-events",        // exchange
-		"comment.posted", // routing key
-		false,                 // mandatory
-		false,                 // immediate
-		amqp091.Publishing{
-			ContentType: "application/json",
-			Body:        body,
-		},
-	)
-	if err != nil {
-		log.Printf("Failed to publish comment posted event: %v", err)
-		return err
-	}
-
-	log.Println("Comment posted event published")
-	return nil
+type PostCreatedEvent struct {
+	UserID uint `json:"user_id"`
+	Message string `json:"message"`
 }
+	
+	
+

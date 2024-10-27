@@ -4,7 +4,7 @@ import (
 	"auth-service/config"
 	"auth-service/domain"
 	"auth-service/messaging"
-	"fmt"
+	"encoding/json"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func NewAuthController(userUsecase domain.UserUsecase) *UserController {
 }
 
 
-func(uc *UserController) Register(c *gin.Context) {
+func (uc *UserController) Register(c *gin.Context) {
     var user domain.User
 
     if err := c.ShouldBindJSON(&user); err != nil {
@@ -35,6 +35,7 @@ func(uc *UserController) Register(c *gin.Context) {
         })
         return
     }
+
     rabbitMQConfig, errr := config.NewRabbitMQConfig()
     if errr != nil {
         log.Fatalf("Failed to initialize RabbitMQ: %v", err)
@@ -42,14 +43,22 @@ func(uc *UserController) Register(c *gin.Context) {
     defer rabbitMQConfig.Close()
 
     publisher := messaging.NewPublisher(rabbitMQConfig)
-    
 
-    message := []byte(fmt.Sprintf("User %s registered", user.Username))
-    errr = publisher.PublishMessage("user_registered", message)
+    // Create a structured event
+    event := messaging.UserRegistrationEvent{
+        UserID:   user.ID,
+        Message: "Welcome to our platform " + user.Username,
+    }
+    message, errr := json.Marshal(event)
+    if errr != nil {
+        log.Printf("Failed to marshal registration event: %v", err)
+        return
+    }
+
+    errr = publisher.PublishMessage("notification_queue", message)
     if errr != nil {
         log.Printf("Failed to publish registration message: %v", err)
     }
-
 
     c.JSON(200, gin.H{
         "status": 200,
@@ -57,25 +66,51 @@ func(uc *UserController) Register(c *gin.Context) {
     })
 }
 
-func(uc *UserController) Login(c *gin.Context) {
+
+func (uc *UserController) Login(c *gin.Context) {
     var user domain.User
-    
+
     if err := c.ShouldBindJSON(&user); err != nil {
         c.JSON(400, gin.H{"error": err.Error()})
         return
     }
 
-    result,err := uc.UserUsecase.Login(user.Email, user.Password)
+    result, err := uc.UserUsecase.Login(user.Email, user.Password)
     if err.Message != "" {
         c.JSON(400, gin.H{
             "status": err.StatusCode,
             "message": err.Message,
-    })
+        })
         return
     }
 
+
+    rabbitMQConfig, errr := config.NewRabbitMQConfig()
+    if errr != nil {
+        log.Fatalf("Failed to initialize RabbitMQ: %v", err)
+    }
+    defer rabbitMQConfig.Close()
+
+    publisher := messaging.NewPublisher(rabbitMQConfig)
+
+    // Create a structured login event
+    event := messaging.UserLoginEvent{
+        UserID:   result.User.ID,
+        Message:"welcome back "  + result.User.Username,
+    }
+    message, errr := json.Marshal(event)
+    if errr != nil {
+        log.Printf("Failed to marshal login event: %v", err)
+        return
+    }
+
+    errr = publisher.PublishMessage("notification_queue", message)
+    if errr != nil {
+        log.Printf("Failed to publish login message: %v", err)
+    }
+
     c.JSON(200, gin.H{
-    "status": 200,        
-    "data": result,
-})
+        "status": 200,
+        "data": result,
+    })
 }

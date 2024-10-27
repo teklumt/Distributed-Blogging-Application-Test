@@ -1,6 +1,6 @@
 package usecase
 
-import "auth-service/domain"
+import "blog-service/domain"
 
 type BlogUseCase struct {
 	BlogRepository domain.BlogRepository

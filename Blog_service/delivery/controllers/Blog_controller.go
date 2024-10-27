@@ -1,8 +1,11 @@
 package controllers
 
 import (
-	"auth-service/domain"
+	"blog-service/domain"
+	"blog-service/messaging"
+	"encoding/json"
 	"fmt"
+	"log"
 
 	"strconv"
 
@@ -11,10 +14,14 @@ import (
 
 type BlogController struct {
 	BlogUsecase domain.BlogUsecase
+	Publisher *messaging.Publisher
 }
 
-func NewBlogController(blogUsecase domain.BlogUsecase) *BlogController {
-	return &BlogController{BlogUsecase: blogUsecase}
+func NewBlogController(blogUsecase domain.BlogUsecase, publisher *messaging.Publisher ) *BlogController {
+	return &BlogController{
+		BlogUsecase: blogUsecase,
+		Publisher: publisher,
+	}
 }
 
 
@@ -22,6 +29,7 @@ func NewBlogController(blogUsecase domain.BlogUsecase) *BlogController {
 func(bc *BlogController) CreateBlog(c *gin.Context) {
 	var blog domain.Blog
 	userIDStr := c.GetString("user_id")
+	username := c.GetString("username")
 
 	fmt.Println("User ID: 9696969696", userIDStr)
 	
@@ -45,6 +53,28 @@ func(bc *BlogController) CreateBlog(c *gin.Context) {
 		})
 		return
 	}
+
+	// Create a structured event
+
+	event := messaging.PostCreatedEvent{
+		UserID:   uint(userID),
+		Message: "New post created by user " + username,
+	}
+
+	message, errr := json.Marshal(event)
+    if errr != nil {
+        log.Printf("Failed to marshal registration event: %v", err)
+        return
+    }
+
+
+	errr = bc.Publisher.PublishMessage("notification_queue", message)
+
+	if errr != nil {
+		log.Printf("Failed to publish registration event: %v", err)
+
+	}
+		
 	c.JSON(200, gin.H{
 		"status": 200,
 		"data": result,
@@ -52,7 +82,7 @@ func(bc *BlogController) CreateBlog(c *gin.Context) {
 }
 
 
-func(bc *BlogController) GetBlogByID(c *gin.Context) {
+func(bc *BlogController)GetBlogByID(c *gin.Context) {
 	id := c.Param("id")
 	blogID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
@@ -181,6 +211,30 @@ func(bc *BlogController) CreateComment(c *gin.Context) {
 		})
 		return
 	}
+
+
+	// Create a structured event
+
+	event := messaging.CommentPostedEvent{
+		UserID: uint(userID),
+		Message: "New comment posted by user " + userIDStr,
+	}
+
+	message, errr := json.Marshal(event)
+	if errr != nil {
+		log.Printf("Failed to marshal registration event: %v", err)
+		return
+	}
+
+	errr = bc.Publisher.PublishMessage("notification_queue", message)
+	
+	if errr != nil {
+		log.Printf("Failed to publish registration event: %v", err)
+	}
+
+
+
+
 	c.JSON(200, gin.H{
 		"status": 200,
 		"data": result,

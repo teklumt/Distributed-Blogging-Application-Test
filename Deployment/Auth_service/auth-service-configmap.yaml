@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-config
+  namespace: default
+data:
+  MYSQL_URL: "mysql://root:root@tcp(mysql:3306)/blog_db?charset=utf8mb4&parseTime=True&loc=Local"
+  RABBITMQ_URL: "amqp://Apirabitmq:Apirabitmq@10.104.41.123:5672/"
+  JWT_SECRET: "TekluMoges"

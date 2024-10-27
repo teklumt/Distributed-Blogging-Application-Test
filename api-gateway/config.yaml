@@ -1,0 +1,6 @@
+services:
+  auth: "http://auth-service:8080"
+  user: "http://user-service:8080"
+  blog: "http://blog-service:8080"
+  notification: "http://notification-service:8080"
+jwt_secret: "TekluMoges"

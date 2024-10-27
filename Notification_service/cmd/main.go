@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 	"log"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/config"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/delivery/routers"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/messaging"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/repository"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/usecase"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/config"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/delivery/routers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/messaging"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/repository"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/usecase"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rabbitmq/amqp091-go"

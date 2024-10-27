@@ -1,6 +1,6 @@
 package usecase
 
-import "teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
+import "github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
 
 type NotificationUsecase struct {
 	NotificationRepository domain.NotificationRepository

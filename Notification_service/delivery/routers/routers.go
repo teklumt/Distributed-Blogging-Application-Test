@@ -1,9 +1,9 @@
 package routers
 
 import (
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/delivery/controllers"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/repository"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/usecase"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/delivery/controllers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/repository"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/usecase"
 
 	"github.com/gin-gonic/gin"
 )

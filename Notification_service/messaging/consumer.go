@@ -2,7 +2,8 @@ package messaging
 
 import (
 	"fmt"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/config"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/config"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )

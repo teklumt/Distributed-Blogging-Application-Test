@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	"teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-notification-service/domain"
 
 	"github.com/gin-gonic/gin"
 )

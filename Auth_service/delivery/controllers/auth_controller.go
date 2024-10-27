@@ -1,7 +1,11 @@
 package controllers
 
 import (
+	"auth-service/config"
 	"auth-service/domain"
+	"auth-service/messaging"
+	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,6 +35,22 @@ func(uc *UserController) Register(c *gin.Context) {
         })
         return
     }
+    rabbitMQConfig, errr := config.NewRabbitMQConfig()
+    if errr != nil {
+        log.Fatalf("Failed to initialize RabbitMQ: %v", err)
+    }
+    defer rabbitMQConfig.Close()
+
+    publisher := messaging.NewPublisher(rabbitMQConfig)
+    
+
+    message := []byte(fmt.Sprintf("User %s registered", user.Username))
+    errr = publisher.PublishMessage("user_registered", message)
+    if errr != nil {
+        log.Printf("Failed to publish registration message: %v", err)
+    }
+
+
     c.JSON(200, gin.H{
         "status": 200,
         "message": "Account created successfully",

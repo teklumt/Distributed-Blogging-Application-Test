@@ -3,6 +3,7 @@ package main
 import (
 	"auth-service/config"
 	"auth-service/delivery/routers"
+	"auth-service/messaging"
 
 	// "auth_service/infrastructure"
 	"log"
@@ -15,12 +16,14 @@ func main() {
     // Connect to the database
     config.ConnectDatabase()
 
+    // Set up the Gin router    rabbitMQConfig, err := config.NewRabbitMQConfig()
+    rabbitMQConfig, err := config.NewRabbitMQConfig()
+    if err != nil {
+        log.Fatalf("Failed to initialize RabbitMQ: %v", err)
+    }
+    defer rabbitMQConfig.Close()
 
-    // Connect to RabbitMQ
-    // config.ConnectRabbitMQ()
-    // defer config.RabbitMQChannel.Close()
-
-    // Set up the Gin router
+    messaging.NewPublisher(rabbitMQConfig)
     r := gin.Default()
 
     // Set up routes

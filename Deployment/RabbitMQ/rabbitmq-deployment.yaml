@@ -1,9 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+data:
+  RABBITMQ_ERLANG_COOKIE: "secure_cookie"
+  RABBITMQ_DEFAULT_USER: "admin"
+  RABBITMQ_DEFAULT_PASS: "password"
+
+---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: rabbitmq
-  namespace: rabbitmq
 spec:
+  serviceName: "rabbitmq"
   replicas: 1
   selector:
     matchLabels:
@@ -16,11 +26,35 @@ spec:
       containers:
         - name: rabbitmq
           image: rabbitmq:3-management
+          envFrom:
+            - configMapRef:
+                name: rabbitmq-config
           ports:
             - containerPort: 5672
             - containerPort: 15672
-          env:
-            - name: RABBITMQ_DEFAULT_USER
-              value: Apirabitmq
-            - name: RABBITMQ_DEFAULT_PASS
-              value: Apirabitmq
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      name: rabbitmq
+    - port: 15672
+      name: rabbitmq-management
+  selector:
+    app: rabbitmq

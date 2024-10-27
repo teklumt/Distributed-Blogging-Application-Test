@@ -4,9 +4,7 @@ package repository
 import (
 	"auth-service/config"
 	"auth-service/domain"
-	"auth-service/messaging"
 	"errors"
-	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -33,21 +31,21 @@ func (ur *userRepository) Register(user domain.User) error {
 	}
 
 	// Publish user registration event to RabbitMQ
-	newUser := domain.User{
-		ID:       user.ID,
-		Username: user.Username,
-	}
+	// newUser := domain.User{
+	// 	ID:       user.ID,
+	// 	Username: user.Username,
+	// }
 
-	err = messaging.PublishUserRegistrationEvent(messaging.UserRegistrationEvent{
-		UserID:   newUser.ID,
-		Username: newUser.Username,
-	})
-	if err != nil {
-		log.Printf("Error publishing registration event: %v", err)
-		return err
-	}
+	// err = messaging.PublishUserRegistrationEvent(messaging.UserRegistrationEvent{
+	// 	UserID:   newUser.ID,
+	// 	Username: newUser.Username,
+	// })
+	// if err != nil {
+	// 	log.Printf("Error publishing registration event: %v", err)
+	// 	return err
+	// }
 
-	log.Println("User registered and event published successfully")
+	// log.Println("User registered and event published successfully")
 	return nil
 }
 

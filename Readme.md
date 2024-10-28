@@ -8,69 +8,68 @@ The project is organized into distinct services with dependencies, configuration
 
 ```plaintext
 api-gateway/
-├── .env                    # Environment variables
-├── config.yaml             # API Gateway configuration
+├── .env                    # Environment variables for API Gateway
+├── config.yaml             # API Gateway configuration file
 ├── Dockerfile              # API Gateway containerization
 ├── go.mod                  # Go module dependencies
 ├── go.sum                  # Dependency checksums
 ├── kubernetes/
-│   ├── deployment.yaml     # Kubernetes deployment configuration
-│   └── service.yaml        # Kubernetes service configuration
-├── main.go                 # API Gateway entry point
+│   ├── deployment.yaml     # Kubernetes deployment config for API Gateway
+│   └── service.yaml        # Kubernetes service config for API Gateway
+├── main.go                 # Entry point for the API Gateway
 └── middleware/             # Middleware components for API Gateway
 
 Auth_service/
-├── cmd/                    # CLI code for Auth service
-├── config/                 # Service configurations
+├── cmd/                    # CLI code and entry point for Auth service
+├── config/                 # Service-specific configurations
 ├── delivery/
 │   └── routers/
-│       └── routers.go      # Auth service routing
+│       └── routers.go      # Auth service routing configuration
 ├── Dockerfile              # Auth service containerization
 ├── domain/                 # Domain models and interfaces
 ├── go.mod                  # Go module dependencies
 ├── go.sum                  # Dependency checksums
-├── infrastructure/         # Infrastructure components
-├── messaging/              # Messaging components
-└── repository/             # Repository implementations
+├── infrastructure/         # Infrastructure components like DB connections
+├── messaging/              # Messaging components for inter-service communication
+└── repository/             # Repository implementations for data handling
 
 Blog_service/
-├── cmd/                    # CLI code for Blog service
-├── config/                 # Service configurations
+├── cmd/                    # CLI code and entry point for Blog service
+├── config/                 # Service-specific configurations
 ├── delivery/
 │   └── routers/
-│       └── routers.go      # Blog service routing
+│       └── routers.go      # Blog service routing configuration
 ├── Dockerfile              # Blog service containerization
 ├── domain/                 # Domain models and interfaces
 ├── go.mod                  # Go module dependencies
 ├── go.sum                  # Dependency checksums
-├── infrastructure/         # Database components
+├── infrastructure/         # Database infrastructure components
 ├── messaging/              # Messaging components
 └── repository/             # Repository implementations
 
 Notification_service/
-├── cmd/                    # CLI code for Notification service
-├── config/                 # Service configurations
+├── cmd/                    # CLI code and entry point for Notification service
+├── config/                 # Service-specific configurations
 ├── delivery/
 │   └── routers/
-│       └── routers.go      # Notification service routing setup
-├── Dockerfile              # Dockerfile for Notification service containerization
+│       └── routers.go      # Notification service routing configuration
+├── Dockerfile              # Containerization for Notification service
 ├── domain/                 # Domain models and interfaces
 ├── go.mod                  # Go module dependencies
 ├── go.sum                  # Dependency checksums
-├── infrastructure/         # Infrastructure code, such as messaging connections
+├── infrastructure/         # Messaging and database infrastructure
 ├── Makefile                # Build and deployment commands
-├── messaging/              # RabbitMQ message-handling components
-├── repository/             # Repository implementations
-└── usecase/                # Use case implementations
-
+├── messaging/              # RabbitMQ or other message handling components
+├── repository/             # Repository implementations for data handling
+└── usecase/                # Use case business logic implementations
 
 User_service/
-├── cmd/                    # CLI code for User service
-├── config/                 # Service configurations
+├── cmd/                    # CLI code and entry point for User service
+├── config/                 # Service-specific configurations
 ├── delivery/
 │   └── routers/
-│       └── routers.go      # User service routing setup
-├── Dockerfile              # Dockerfile for User service containerization
+│       └── routers.go      # User service routing configuration
+├── Dockerfile              # Containerization for User service
 ├── domain/                 # Domain models and interfaces
 ├── go.mod                  # Go module dependencies
 ├── go.sum                  # Dependency checksums
@@ -78,20 +77,37 @@ User_service/
 ├── Makefile                # Build and deployment commands
 ├── messaging/              # Messaging components
 ├── repository/             # Repository implementations
-└── usecase/                # Use case implementations
+└── usecase/                # Use case business logic implementations
 
 database/
-├── config/                 # Database configuration
-├── deployment/             # Deployment scripts
+├── config/                 # Database configuration files
+├── deployment/             # Deployment scripts for database
 └── schema/                 # Database schema files
 
 k8s/
 ├── api-gateway/
+│   ├── api-gateway-deployment.yaml  # Deployment config for API Gateway
+│   └── api-gateway-service.yaml     # Service config for API Gateway
 ├── Auth_service/
+│   └── auth-service-deployment.yaml # Deployment config for Auth service
 ├── Blog_service/
+│   └── blog-deployment.yaml         # Deployment config for Blog service
 ├── Notification/
+│   └── notification-deployment.yaml # Deployment config for Notification service
 ├── RabbitMQ/
-└── User_services/
+│   └── rabbitmq-deployment.yaml     # Deployment config for RabbitMQ
+├── monitoring/
+│   ├── grafana/
+│   │   ├── grafana-deployment.yaml  # Deployment config for Grafana
+│   │   └── grafana-service.yaml     # Service config for Grafana
+│   ├── prometheus/
+│   │   ├── prometheus-deployment.yaml  # Deployment config for Prometheus
+│   │   └── prometheus-service.yaml     # Service config for Prometheus
+│   └── alertmanager/
+│       ├── alertmanager-deployment.yaml  # Deployment config for Alertmanager
+│       └── alertmanager-service.yaml     # Service config for Alertmanager
+└── User_service/
+    └── user-service-deployment.yaml # Deployment config for User service
 ```
 
 ## 🚀 Microservices Architecture
@@ -149,14 +165,6 @@ The microservices are interconnected as follows:
 ## 📬 Messaging System
 
 RabbitMQ is deployed to enable seamless message-based communication among services. The Notification Service uses it to trigger real-time notifications based on event messages.
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
-
-Happy deploying and managing your microservices architecture!
 
 ```
 

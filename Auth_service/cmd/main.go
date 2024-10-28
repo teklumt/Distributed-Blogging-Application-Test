@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
+
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config"
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/delivery/routers"
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/messaging"
 
 	// "auth_service/infrastructure"
 	"log"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +30,9 @@ func main() {
     messaging.NewPublisher(rabbitMQConfig)
     r := gin.Default()
 
-    r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
+    http.Handle("/metrics", promhttp.Handler())
+    http.ListenAndServe(":9090", nil)
+    // r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
     // Set up routes
     routers.SetupRouter(r)

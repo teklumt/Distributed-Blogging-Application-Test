@@ -1,5 +1,6 @@
 # Distributed Microservices Project
-![Uploading design.png…]()
+
+![design](https://github.com/user-attachments/assets/c728efab-524c-40af-9cd1-a529959556b9)
 
 A distributed system built with microservices to manage API routing, authentication, blogging, notifications, and user data. The system is containerized using Docker, orchestrated by Kubernetes, and connected through RabbitMQ for real-time inter-service communication.
 

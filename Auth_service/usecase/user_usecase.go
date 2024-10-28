@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"auth-service/domain"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/domain"
 )
 
 type UserUseCase struct {

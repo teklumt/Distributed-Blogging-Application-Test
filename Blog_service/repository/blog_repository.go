@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"blog-service/config"
-	"blog-service/domain"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/config"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/domain"
 )
 
 type BlogRepository struct{}

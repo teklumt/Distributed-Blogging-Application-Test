@@ -1,16 +1,11 @@
-buildImage:
-	docker build -t teklumt/api:api-gatewayV0.0 .
+build:
+    docker build -t teklumt/api:api-gatewayV0.0 .
 
-runContainer:
-	docker run -d -p 8080:8080 --name teklumt/api:api-gatewayV0.0 api-gateway
+push:
+    docker push teklumt/api:api-gatewayV0.0
 
-stopContainer:
-	docker stop teklumt/api:api-gatewayV0.0
+deploy:
+    kubectl apply -f kubernetes/deployment.yaml
+    kubectl apply -f kubernetes/service.yaml
 
-removeContainer:
-	docker rm teklumt/api:api-gatewayV0.0
-
-pushImage:
-	docker push teklumt/api:api-gatewayV0.0
-
-PHONY: buildImage runContainer stopContainer removeContainer
+PHONY: build push deploy

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"auth-service/config"
-	"auth-service/delivery/routers"
-	"auth-service/messaging"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/delivery/routers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/messaging"
 
 	// "auth_service/infrastructure"
 	"log"

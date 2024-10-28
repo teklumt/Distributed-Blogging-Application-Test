@@ -1,8 +1,8 @@
 package infrastructure
 
 import (
-	"auth-service/config"
-	"auth-service/domain"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/domain"
 	"fmt"
 	"time"
 

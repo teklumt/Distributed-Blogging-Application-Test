@@ -1,11 +1,11 @@
 package routers
 
 import (
-	"blog-service/delivery/controllers"
-	"blog-service/infrastructure"
-	"blog-service/messaging"
-	"blog-service/repository"
-	"blog-service/usecase"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/delivery/controllers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/infrastructure"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/messaging"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/repository"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/usecase"
 
 	"github.com/gin-gonic/gin"
 )

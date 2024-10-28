@@ -1,11 +1,10 @@
-module api-gateway
+module github.com/teklumt/Distributed-Blogging-Application-Test-api-get-way
 
 go 1.22.5
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/golang-jwt/jwt/v4 v4.5.0
-	gopkg.in/yaml.v2 v2.4.0
+	github.com/joho/godotenv v1.5.1
 )
 
 require (

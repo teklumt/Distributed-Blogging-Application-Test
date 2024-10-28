@@ -1,81 +1,43 @@
 package main
 
 import (
-	"api-gateway/middleware"
-	"io/ioutil"
-	"log"
-	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/yaml.v2"
+	"github.com/joho/godotenv"
 )
 
-type Config struct {
-    Services struct {
-        Auth         string `yaml:"auth"`
-        User         string `yaml:"user"`
-        Blog         string `yaml:"blog"`
-        Notification string `yaml:"notification"`
-    } `yaml:"services"`
-    JWTSecret string `yaml:"jwt_secret"`
-}
-
-var config Config
-
-func initConfig() {
-    data, err := ioutil.ReadFile("config.yaml")
-    if err != nil {
-        log.Fatalf("Error reading config file: %v", err)
-    }
-    if err := yaml.Unmarshal(data, &config); err != nil {
-        log.Fatalf("Error parsing config file: %v", err)
-    }
-    os.Setenv("JWT_SECRET", config.JWTSecret)
-}
-
 func main() {
-    initConfig()
+    // Load environment variables
+    if err := godotenv.Load(); err != nil {
+        panic("Error loading .env file")
+    }
+
     r := gin.Default()
 
-    // Apply CORS 
-    r.Use(middleware.CORSMiddleware())
-    r.POST("/auth/*path", AuthHandler)
+    // Route requests to Auth Service
+    r.Any("/auth/*proxyPath", reverseProxy(os.Getenv("AUTH_SERVICE_URL")))
 
-    // Apply JWT middleware
-    r.Use(middleware.JWTAuthMiddleware())
+    // Route requests to Blog Service
+    r.Any("/blog/*proxyPath", reverseProxy(os.Getenv("BLOG_SERVICE_URL")))
+    r.Any("/comment/*proxyPath", reverseProxy(os.Getenv("BLOG_SERVICE_URL")))
+	
+	
+    r.Any("/user/*proxyPath", reverseProxy(os.Getenv("USER_SERVICE_URL")))
 
-    // Define routes and handlers
-    r.Any("/users/*path", UserHandler)
-    r.Any("/blogs/*path", BlogHandler)
-    r.Any("/notifications/*path", NotificationHandler)
+    // Route requests to Notification Service
+    r.Any("/notification/*proxyPath", reverseProxy(os.Getenv("NOTIFICATION_SERVICE_URL")))
 
-    // Start the server
-    r.Run(":8080")
+    r.Run(":8080") 
 }
 
+func reverseProxy(target string) gin.HandlerFunc {
+    url, _ := url.Parse(target)
+    proxy := httputil.NewSingleHostReverseProxy(url)
 
-func AuthHandler(c *gin.Context) {
-    proxyRequest(c, config.Services.Auth + c.Request.URL.Path)
-}
-
-func UserHandler(c *gin.Context) {
-    proxyRequest(c, config.Services.User + c.Request.URL.Path)
-}
-
-func BlogHandler(c *gin.Context) {
-    proxyRequest(c, config.Services.Blog + c.Request.URL.Path)
-}
-
-func NotificationHandler(c *gin.Context) {
-    proxyRequest(c, config.Services.Notification + c.Request.URL.Path)
-}
-
-func proxyRequest(c *gin.Context, targetURL string) {
-    resp, err := http.Post(targetURL, c.Request.Header.Get("Content-Type"), c.Request.Body)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to reach service"})
-        return
+    return func(c *gin.Context) {
+        proxy.ServeHTTP(c.Writer, c.Request)
     }
-    c.DataFromReader(resp.StatusCode, resp.ContentLength, resp.Header.Get("Content-Type"), resp.Body, nil)
 }

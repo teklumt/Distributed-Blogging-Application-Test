@@ -1,6 +1,6 @@
 package usecase
 
-import "blog-service/domain"
+import "github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/domain"
 
 type BlogUseCase struct {
 	BlogRepository domain.BlogRepository

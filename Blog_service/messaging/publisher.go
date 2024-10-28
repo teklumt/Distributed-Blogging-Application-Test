@@ -1,7 +1,7 @@
 package messaging
 
 import (
-	"blog-service/config" // Update this import path if necessary
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/config" // Update this import path if necessary
 	"log"
 
 	amqp "github.com/rabbitmq/amqp091-go"

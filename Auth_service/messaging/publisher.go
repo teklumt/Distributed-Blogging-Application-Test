@@ -1,8 +1,9 @@
 package messaging
 
 import (
-	"auth-service/config" // Update this import path if necessary
 	"log"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config" // Update this import path if necessary
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )

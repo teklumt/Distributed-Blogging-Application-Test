@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"blog-service/domain"
-	"blog-service/messaging"
 	"encoding/json"
 	"fmt"
 	"log"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/domain"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/messaging"
 
 	"strconv"
 

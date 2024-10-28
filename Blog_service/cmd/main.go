@@ -1,9 +1,9 @@
 package main
 
 import (
-	"blog-service/config"
-	"blog-service/delivery/routers"
-	"blog-service/messaging"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/config"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/delivery/routers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-blog-service/messaging"
 
 	// "auth_service/infrastructure"
 	"log"

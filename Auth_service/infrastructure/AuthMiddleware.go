@@ -1,8 +1,9 @@
 package infrastructure
 
 import (
-	"auth-service/config"
 	"fmt"
+
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config"
 
 	"net/http"
 	"strings"

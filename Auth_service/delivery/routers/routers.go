@@ -1,10 +1,10 @@
 package routers
 
 import (
-	"auth-service/delivery/controllers"
-	"auth-service/infrastructure"
-	"auth-service/repository"
-	"auth-service/usecase"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/delivery/controllers"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/infrastructure"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/repository"
+	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +25,5 @@ func SetupRouter(r *gin.Engine) {
     {
         authGroup.POST("/login", AuthController.Login)
         authGroup.POST("/register", AuthController.Register)
-        // authGroup.POST("/refresh-token", controllers.RefreshToken)
     }
 }

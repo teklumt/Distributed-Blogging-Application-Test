@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: teklumt/api:api-gatewayV0.0
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: api-gateway-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+data:
+  AUTH_SERVICE_URL: "http://auth-service:8080"
+  BLOG_SERVICE_URL: "http://blog-service:8080"
+  NOTIFICATION_SERVICE_URL: "http://notification-service:8080"

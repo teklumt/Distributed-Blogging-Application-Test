@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: teklumt/api:auth_service0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RABBITMQ_URL
+              value: "amqp://admin:password@rabbitmq:5672/"
+            - name: MYSQL_DSN
+              value: "root:root@tcp(mysql:3306)/blog_db?charset=utf8mb4&parseTime=True&loc=Local"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

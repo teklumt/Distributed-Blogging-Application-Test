@@ -1,4 +1,4 @@
-module blog-service
+module github.com/teklumt/Distributed-Blogging-Application-Test-blog-service
 
 go 1.22.5
 

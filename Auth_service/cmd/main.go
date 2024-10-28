@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/config"
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/delivery/routers"
 	"github.com/teklumt/Distributed-Blogging-Application-Test-auth-service/messaging"
@@ -25,6 +27,8 @@ func main() {
 
     messaging.NewPublisher(rabbitMQConfig)
     r := gin.Default()
+
+    r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
     // Set up routes
     routers.SetupRouter(r)

@@ -1,5 +1,3 @@
-
-```markdown
 # Distributed Microservices Project
 
 A robust distributed system featuring microservices for API management, authentication, blogging, notifications, and user management. This project is containerized with Docker and deployed on Kubernetes, utilizing RabbitMQ for efficient inter-service messaging.
@@ -121,4 +119,7 @@ This project is licensed under the MIT License.
 ---
 
 Enjoy deploying your distributed system!
+
+```
+
 ```

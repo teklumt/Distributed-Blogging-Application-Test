@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: blog-service
-    spec:
+    spec:a
       containers:
         - name: blog-service
           image: teklumt/api:blog_service0.0
@@ -22,6 +22,11 @@ spec:
               value: "amqp://admin:password@rabbitmq:5672/"
             - name: DB_URL
               value: "root:root@tcp(mysql:3306)/blog_db?charset=utf8mb4&parseTime=True&loc=Local"
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "300m"
 ---
 apiVersion: v1
 kind: Service

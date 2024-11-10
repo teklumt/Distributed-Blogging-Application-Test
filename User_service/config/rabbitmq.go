@@ -3,22 +3,24 @@ package config
 import (
 	"log"
 
-	"github.com/rabbitmq/amqp091-go"
+	 "github.com/rabbitmq/amqp091-go"
+	"github.com/streadway/amqp"
 )
 
 var RabbitMQChannel *amqp091.Channel
 
 func ConnectRabbitMQ() {
-    conn, err := amqp091.Dial("amqp://Apirabitmq:Apirabitmq@rabbitmq.rabbitmq.svc.cluster.local:5672/")
-    if err != nil {
-        log.Fatalf("Failed to connect to RabbitMQ: %v", err)
-    }
+    // conn, err := amqp.Dial("amqp://admin:password@127.0.0.1:5672/")
 
-    ch, err := conn.Channel()
-    if err != nil {
-        log.Fatalf("Failed to open a channel: %v", err)
-    }
+    // if err != nil {
+    //     log.Fatalf("Failed to connect to RabbitMQ: %v", err)
+    // }
 
-    RabbitMQChannel = ch
-    log.Println("Connected to RabbitMQ")
+    // ch, err := conn.Channel()
+    // if err != nil {
+    //     log.Fatalf("Failed to open a channel: %v", err)
+    // }
+
+    // RabbitMQChannel = ch
+    // log.Println("Connected to RabbitMQ")
 }

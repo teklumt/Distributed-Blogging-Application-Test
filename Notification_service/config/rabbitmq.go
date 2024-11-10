@@ -12,7 +12,9 @@ type RabbitMQConfig struct {
 }
 
 func NewRabbitMQConfig() (*RabbitMQConfig, error) {
-	conn, err := amqp.Dial("amqp://admin:password@rabbitmq:5672/")
+	// conn, err := amqp.Dial("amqp://admin:password@rabbitmq:5672/")
+	conn, err := amqp.Dial("amqp://admin:password@127.0.0.1:5672/")
+
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
 		return nil, err

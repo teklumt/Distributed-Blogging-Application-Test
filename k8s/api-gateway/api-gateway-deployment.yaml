@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: your-dockerhub-username/api-gateway:latest
+          image: api-gateway:latest
           ports:
             - containerPort: 8080
           envFrom:
